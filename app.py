@@ -121,7 +121,8 @@ def write_block(pdf, text, font_family="Helvetica", style="", size=11, h=7):
         return
     pdf.set_font(font_family, style, size)
     pdf.set_x(pdf.l_margin)
-    pdf.multi_cell(pdf.epw, h, text)
+    epw = pdf.w - pdf.l_margin - pdf.r_margin
+    pdf.multi_cell(epw, h, text)
     pdf.ln(1)
 
 
@@ -137,7 +138,7 @@ def build_pdf_report(title, subtitle="", sections=None, image_paths=None):
 
     pdf.set_font("Helvetica", "I", 10)
     pdf.set_x(pdf.l_margin)
-    pdf.cell(pdf.epw, 8, clean_text(f"Fecha de generacion: {datetime.now().strftime('%d/%m/%Y %H:%M')}"))
+    pdf.cell(epw, 8, clean_text(f"Fecha de generacion: {datetime.now().strftime('%d/%m/%Y %H:%M')}"))
     pdf.ln(10)
 
     if image_paths:
