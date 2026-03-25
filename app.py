@@ -131,6 +131,8 @@ def build_pdf_report(title, subtitle="", sections=None, image_paths=None):
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
 
+    epw = pdf.w - pdf.l_margin - pdf.r_margin
+
     write_block(pdf, title, style="B", size=16, h=10)
 
     if subtitle:
@@ -140,6 +142,8 @@ def build_pdf_report(title, subtitle="", sections=None, image_paths=None):
     pdf.set_x(pdf.l_margin)
     pdf.cell(epw, 8, clean_text(f"Fecha de generacion: {datetime.now().strftime('%d/%m/%Y %H:%M')}"))
     pdf.ln(10)
+
+
 
     if image_paths:
         for img in image_paths:
