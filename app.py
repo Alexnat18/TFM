@@ -125,7 +125,6 @@ def write_block(pdf, text, font_family="Helvetica", style="", size=11, h=7):
     pdf.multi_cell(epw, h, text)
     pdf.ln(1)
 
-
 def build_pdf_report(title, subtitle="", sections=None, image_paths=None):
     pdf = PDFReport()
     pdf.set_auto_page_break(auto=True, margin=15)
@@ -143,13 +142,11 @@ def build_pdf_report(title, subtitle="", sections=None, image_paths=None):
     pdf.cell(epw, 8, clean_text(f"Fecha de generacion: {datetime.now().strftime('%d/%m/%Y %H:%M')}"))
     pdf.ln(10)
 
-
-
     if image_paths:
         for img in image_paths:
             if img:
                 pdf.set_x(pdf.l_margin)
-                pdf.image(img, x=pdf.l_margin, w=180)
+                pdf.image(img, x=pdf.l_margin, w=epw)
                 pdf.ln(6)
 
     if sections:
@@ -165,10 +162,15 @@ def build_pdf_report(title, subtitle="", sections=None, image_paths=None):
 
             pdf.ln(1)
 
-    pdf_bytes = pdf.output(dest="S")
-    if isinstance(pdf_bytes, bytearray):
-        pdf_bytes = bytes(pdf_bytes)
-    return pdf_bytes
+    pdf_data = pdf.output(dest="S")
+
+    if isinstance(pdf_data, str):
+        pdf_data = pdf_data.encode("latin-1")
+    elif isinstance(pdf_data, bytearray):
+        pdf_data = bytes(pdf_data)
+
+    return pdf_data
+
 
 
 def save_altair_chart(chart, path):
