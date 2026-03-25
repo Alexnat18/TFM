@@ -74,7 +74,8 @@ class PDFReport(FPDF):
     def header(self):
         self.set_font("Helvetica", "B", 14)
         self.set_x(self.l_margin)
-        self.cell(self.epw, 10, "Informe de Analisis de Baloncesto", align="C")
+        epw = self.w - self.l_margin - self.r_margin
+        self.cell(epw, 10, "Informe de Analisis de Baloncesto", align="C")
         self.ln(14)
 
     def footer(self):
