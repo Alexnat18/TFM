@@ -225,7 +225,7 @@ def load_team_metrics():
     df_j = pd.read_csv("df_jornades_all.csv")
     df_r = pd.read_csv("liga_ranks.csv")
 
-    num_cols = ["pos_part","PosesionesTEAM","OER","DER","eFG","ORB","AST","TOV","PPP","NET"]
+    num_cols = ["POS","PosesionesTEAM","OER","DER","eFG","ORB","AST","TOV","PPP","NET"]
     for c in num_cols:
         if c in df_j.columns:
             df_j[c] = pd.to_numeric(df_j[c], errors="coerce")
@@ -318,7 +318,7 @@ def predict_winprob_ml(teamA_row, teamB_row, home=0):
         "ORB_diff": float(teamA_row["ORB"]) - float(teamB_row["ORB"]),
         "AST_diff": float(teamA_row["AST"]) - float(teamB_row["AST"]),
         "TOV_diff": float(teamA_row["TOV"]) - float(teamB_row["TOV"]),
-        "pos_part_diff": float(teamA_row["pos_part"]) - float(teamB_row["pos_part"]),
+        "POS_diff": float(teamA_row["POS"]) - float(teamB_row["POS"]),
         "home": float(home),
     }
 
@@ -397,7 +397,7 @@ def compute_win_loss_profile(df_team):
     if "Resultat" not in df_team.columns:
         return {"status": "no_column", "data": None}
 
-    metrics = ["OER","DER","eFG","ORB","AST","TOV","PPP","pos_part"]
+    metrics = ["OER","DER","eFG","ORB","AST","TOV","PPP","POS"]
     metrics = [m for m in metrics if m in df_team.columns]
 
     df_w = df_team[df_team["Resultat"] == "W"]
@@ -485,7 +485,7 @@ def previa_partido_ranks(df_r, equipo_a, equipo_b, sd=10):
     b = df_r[df_r["EQUIPO"] == equipo_b].iloc[0]
 
     # Posesiones esperadas
-    poss = np.nanmean([a.get("pos_part", np.nan), b.get("pos_part", np.nan)])
+    poss = np.nanmean([a.get("POS", np.nan), b.get("POS", np.nan)])
 
     # IMPORTANT:
     # NET es por 100 posesiones. Si queremos margen en puntos:
@@ -509,7 +509,7 @@ Probabilitat victòria {a['Team']}: {100*p_win:.2f} %
 """.strip()
 
     # Tabla de métricas con rank al lado
-    metrics = ["OER","DER","eFG","ORB","AST","TOV","PPP","pos_part","NET"]
+    metrics = ["OER","DER","eFG","ORB","AST","TOV","PPP","POS","NET"]
     metrics = [m for m in metrics if m in df_r.columns]  # robust
 
     met_tbl = pd.DataFrame({
@@ -1052,7 +1052,7 @@ def page_analitica_equips():
     # ==========================
     st.subheader("Perfil vs media de la liga")
 
-    metrics = ["OER", "DER", "eFG", "ORB", "AST", "TOV", "PPP", "pos_part"]
+    metrics = ["OER", "DER", "eFG", "ORB", "AST", "TOV", "PPP", "POS"]
     metrics = [m for m in metrics if m in df_r.columns]
 
     league_avg = df_r[metrics].mean(numeric_only=True)
@@ -1537,7 +1537,7 @@ def page_comparativa_equips():
 
     default_x = "OER" if "OER" in options else options[0]
     default_y = "DER" if "DER" in options else options[1]
-    default_size = "pos_part" if "pos_part" in options else "(ninguno)"
+    default_size = "POS" if "POS" in options else "(ninguno)"
 
     st.markdown("### Total temporada")
 
@@ -1771,7 +1771,7 @@ def page_comparativa_equips_last3():
 
     default_x = "OER" if "OER" in options else options[0]
     default_y = "DER" if "DER" in options else options[1]
-    default_size = "pos_part" if "pos_part" in options else "(ninguno)"
+    default_size = "POS" if "POS" in options else "(ninguno)"
 
     st.markdown("### Rendimiento reciente (últimos 3 partidos)")
 
@@ -2067,8 +2067,8 @@ def build_previa_partit(df_r, equipo_a, equipo_b):
     b = df_r[df_r["EQUIPO"] == equipo_b].iloc[0]
 
     # posesiones esperadas y pace de liga
-    poss = np.nanmean([a.get("pos_part", np.nan), b.get("pos_part", np.nan)])
-    league_pace = pd.to_numeric(df_r.get("pos_part", np.nan), errors="coerce").mean()
+    poss = np.nanmean([a.get("POS", np.nan), b.get("POS", np.nan)])
+    league_pace = pd.to_numeric(df_r.get("POS", np.nan), errors="coerce").mean()
 
     # NET es por 100 posesiones -> margen en puntos ≈ (NET_diff/100)*poss
     net_a = pd.to_numeric(a.get("NET", np.nan), errors="coerce")
@@ -2085,11 +2085,11 @@ def build_previa_partit(df_r, equipo_a, equipo_b):
     pace_txt = pace_label(poss, league_pace)
 
     # Tabla de métricas (valor + rank)
-    metrics = ["OER", "DER", "eFG", "ORB", "AST", "TOV", "PPP", "pos_part", "NET"]
+    metrics = ["OER", "DER", "eFG", "ORB", "AST", "TOV", "PPP", "POS", "NET"]
     metrics = [m for m in metrics if m in df_r.columns]
 
     def _decimals(m):
-        return 1 if m == "pos_part" else 2
+        return 1 if m == "POS" else 2
 
     met_tbl = pd.DataFrame({
     "Metrica": metrics,
