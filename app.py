@@ -393,14 +393,14 @@ def compute_win_loss_profile(df_team):
     - Equipoo sin victorias
     """
 
-    if "RESULTADO" not in df_team.columns:
+    if "RESULTAT" not in df_team.columns:
         return {"status": "no_column", "data": None}
 
     metrics = ["OER","DER","eFG","ORB","AST","TOV","PPP","POS"]
     metrics = [m for m in metrics if m in df_team.columns]
 
-    df_w = df_team[df_team["RESULTADO"] == "W"]
-    df_l = df_team[df_team["RESULTADO"] == "L"]
+    df_w = df_team[df_team["RESULTAT"] == "W"]
+    df_l = df_team[df_team["RESULTAT"] == "L"]
 
     # CASO 1: invicto
     if df_l.empty and not df_w.empty:
