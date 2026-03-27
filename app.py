@@ -243,7 +243,7 @@ def load_quintets():
 
     # Asegura tipos numéricos
     num_cols = ["pos","plus_minus","puntos_anotats_total","puntos_rebuts_total","OER","DER","NET",
-                "plus_minus_total","pos_total"]
+                "plus_minus_total","POS"]
     for c in num_cols:
         if c in dfq.columns:
             dfq[c] = pd.to_numeric(dfq[c], errors="coerce")
@@ -275,7 +275,7 @@ def load_combos_all():
     num_cols = [
         "pos","plus_minus","OER","DER","NET","PPP",
         "puntos_anotats_total","puntos_rebuts_total",
-        "pos_total","plus_minus_total"
+        "POS","plus_minus_total"
     ]
     for c in num_cols:
         if c in dfc.columns:
@@ -292,7 +292,6 @@ def load_combos_all():
         dfc["tipus_df"] = dfc["tipus_df"].astype(str).str.lower()
 
     return dfc
-
 
 
 
@@ -366,7 +365,7 @@ def load_eventos_tiros():
     df = pd.read_csv("eventos_todos_equipos.csv")
 
     # Texto limpio
-    for c in ["Jugador", "Accion", "Jornada", "TEAM", "tipo", "Rol", "bloc", "costat"]:
+    for c in ["Jugador", "Accion", "Jornada", "TEAM", "tipo", "ROL", "bloc", "costat"]:
         if c in df.columns:
             df[c] = df[c].astype(str).str.strip()
 
@@ -400,8 +399,8 @@ def compute_win_loss_profile(df_team):
     metrics = ["OER","DER","eFG","ORB","AST","TOV","PPP","POS"]
     metrics = [m for m in metrics if m in df_team.columns]
 
-    df_w = df_team[df_team["Resultat"] == "W"]
-    df_l = df_team[df_team["Resultat"] == "L"]
+    df_w = df_team[df_team["RESULTADO"] == "W"]
+    df_l = df_team[df_team["RESULTADO"] == "L"]
 
     # CASO 1: invicto
     if df_l.empty and not df_w.empty:
