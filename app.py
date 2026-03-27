@@ -393,7 +393,7 @@ def compute_win_loss_profile(df_team):
     - Equipoo sin victorias
     """
 
-    if "Resultat" not in df_team.columns:
+    if "RESULTADO" not in df_team.columns:
         return {"status": "no_column", "data": None}
 
     metrics = ["OER","DER","eFG","ORB","AST","TOV","PPP","POS"]
