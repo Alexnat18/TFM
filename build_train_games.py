@@ -27,10 +27,10 @@ if missing:
 df["win"] = (df["Resultat"].astype(str).str.upper() == "W").astype(int)
 
 # 5) Mètriques disponibles
-metrics = ["NET", "OER", "DER", "eFG", "ORB", "AST", "TOV", "pos_part"]
+metrics = ["NET", "OER", "DER", "eFG", "ORB", "AST", "TOV", "POS"]
 metrics = [m for m in metrics if m in df.columns]
 if len(metrics) == 0:
-    raise ValueError("No he trobat cap mètrica (NET/OER/DER/eFG/ORB/AST/TOV/pos_part).")
+    raise ValueError("No he trobat cap mètrica (NET/OER/DER/eFG/ORB/AST/TOV/POS).")
 
 # 6) Tipus consistents
 df["TEAM_id"] = df["TEAM_id"].astype(str).str.strip()
