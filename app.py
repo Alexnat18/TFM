@@ -321,7 +321,8 @@ def predict_winprob_ml(teamA_row, teamB_row, home=0):
         "home": float(home),
     }
 
-    X = pd.DataFrame([x])[feats]
+    #X = pd.DataFrame([x])[feats]
+    X = pd.DataFrame([x]).reindex(columns=feats, fill_value=0)
     p = model.predict_proba(X)[:, 1][0]
     return float(p)
 
