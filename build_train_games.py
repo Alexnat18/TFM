@@ -18,19 +18,19 @@ if "Jornada_num" not in df.columns:
         raise ValueError("Falta 'Jornada_num' o 'Jornada'.")
 
 # 3) Check columnes clau (ara amb TEAM_id)
-required = ["TEAM_id", "Rival_idR", "Jornada_num", "Resultat"]
+required = ["TEAM_id", "Rival_idR", "Jornada_num", "RESULTAT"]
 missing = [c for c in required if c not in df.columns]
 if missing:
     raise ValueError(f"Falten columnes: {missing}")
 
 # 4) Target
-df["win"] = (df["Resultat"].astype(str).str.upper() == "W").astype(int)
+df["win"] = (df["RESULTAT"].astype(str).str.upper() == "W").astype(int)
 
 # 5) Mètriques disponibles
-metrics = ["NET", "OER", "DER", "eFG", "ORB", "AST", "TOV", "POS"]
+metrics = ["NET", "OER", "DER", "eFG", "ORB", "AST", "TOV", "pos_part"]
 metrics = [m for m in metrics if m in df.columns]
 if len(metrics) == 0:
-    raise ValueError("No he trobat cap mètrica (NET/OER/DER/eFG/ORB/AST/TOV/POS).")
+    raise ValueError("No he trobat cap mètrica (NET/OER/DER/eFG/ORB/AST/TOV/pos_part).")
 
 # 6) Tipus consistents
 df["TEAM_id"] = df["TEAM_id"].astype(str).str.strip()

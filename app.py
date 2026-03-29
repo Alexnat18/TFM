@@ -1035,8 +1035,8 @@ def page_analitica_equips():
     df_team = df_j[df_j["EQUIPO"] == equipo_sel].sort_values("Jornada_num").copy()
     tot = df_r[df_r["EQUIPO"] == equipo_sel].iloc[0]
 
-    w = int((df_team["Resultat"] == "W").sum()) if "Resultat" in df_team.columns else 0
-    l = int((df_team["Resultat"] == "L").sum()) if "Resultat" in df_team.columns else 0
+    w = int((df_team["RESULTAT"] == "W").sum()) if "RESULTAT" in df_team.columns else 0
+    l = int((df_team["RESULTAT"] == "L").sum()) if "RESULTAT" in df_team.columns else 0
     st.caption(f"**{team_name}** | Partidos: {len(df_team)} | Record: {w}-{l}")
 
     # Variables resumen para PDF
@@ -1132,20 +1132,20 @@ def page_analitica_equips():
             alt.Tooltip("Jornada:N", title="Jornada"),
             alt.Tooltip(f"{metric_sel}:Q", format=".2f"),
         ] + (
-            [alt.Tooltip("Resultat:N", title="Resultat")]
-            if "Resultat" in df_team.columns else []
+            [alt.Tooltip("RESULTAT:N", title="RESULTAT")]
+            if "RESULTAT" in df_team.columns else []
         ),
     )
 
     pts = (
         base.mark_circle(size=80).encode(
             color=alt.Color(
-                "Resultat:N",
+                "RESULTAT:N",
                 scale=alt.Scale(domain=["W", "L"], range=["#1B9E77", "#D95F02"]),
-                legend=alt.Legend(title="Resultat"),
+                legend=alt.Legend(title="RESULTAT"),
             )
         )
-        if "Resultat" in df_team.columns
+        if "RESULTAT" in df_team.columns
         else base.mark_circle(size=80)
     )
 
